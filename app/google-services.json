@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "591316914673",
+    "project_id": "investwhiz-de92e",
+    "storage_bucket": "investwhiz-de92e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591316914673:android:7cd26bb116c42625497450",
+        "android_client_info": {
+          "package_name": "com.example.investwhiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtxL9FRaJaN49G3iLXvN0veoJWJXJCy9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
