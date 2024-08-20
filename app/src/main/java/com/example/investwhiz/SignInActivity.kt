@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.investwhiz.databinding.ActivitySignInBinding
 import com.google.firebase.auth.FirebaseAuth
 
+
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
