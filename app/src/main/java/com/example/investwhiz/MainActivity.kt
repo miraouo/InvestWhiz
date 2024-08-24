@@ -2,10 +2,13 @@ package com.example.investwhiz
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.ScaleAnimation
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+
+    private var isFrontVisible = true
+    private var isAnimating = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,39 +19,57 @@ class MainActivity : AppCompatActivity() {
         val definitionView = findViewById<View>(R.id.definition)
 
         flashcard.setOnClickListener {
-            // Define flip-out animation
-            val flipOutAnimation = ScaleAnimation(
-                1f, 0f,  // fromX, toX
-                1f, 1f,  // fromY, toY
-                ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  // pivotX
-                ScaleAnimation.RELATIVE_TO_SELF, 0.5f   // pivotY
-            ).apply {
-                duration = 500
-                fillAfter = true
-            }
+            if (isAnimating) return@setOnClickListener // Prevent multiple clicks during animation
 
-            // Define flip-in animation
-            val flipInAnimation = ScaleAnimation(
-                0f, 1f,  // fromX, toX
-                1f, 1f,  // fromY, toY
-                ScaleAnimation.RELATIVE_TO_SELF, 0.5f,  // pivotX
-                ScaleAnimation.RELATIVE_TO_SELF, 0.5f   // pivotY
-            ).apply {
-                duration = 500
-                fillAfter = true
-            }
+            isAnimating = true
 
-            if (termView.visibility == View.VISIBLE) {
-                termView.startAnimation(flipOutAnimation)
-                termView.visibility = View.GONE
-                definitionView.visibility = View.VISIBLE
-                definitionView.startAnimation(flipInAnimation)
+            val flipDuration = 300L // Faster duration for the flip animation
+            val pivotX = flashcard.width / 2f
+            val pivotY = flashcard.height / 2f
+
+            if (isFrontVisible) {
+                // Flip to definition
+                flashcard.animate()
+                    .rotationX(90f)
+                    .setDuration(flipDuration / 2)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .withEndAction {
+                        termView.visibility = View.GONE
+                        definitionView.visibility = View.VISIBLE
+                        flashcard.rotationX = -90f // Set the rotation to the back
+                        flashcard.animate()
+                            .rotationX(0f)
+                            .setDuration(flipDuration / 2)
+                            .setInterpolator(AccelerateDecelerateInterpolator())
+                            .withEndAction {
+                                isAnimating = false
+                            }
+                            .start()
+                    }
+                    .start()
             } else {
-                definitionView.startAnimation(flipOutAnimation)
-                definitionView.visibility = View.GONE
-                termView.visibility = View.VISIBLE
-                termView.startAnimation(flipInAnimation)
+                // Flip to term
+                flashcard.animate()
+                    .rotationX(-90f)
+                    .setDuration(flipDuration / 2)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .withEndAction {
+                        definitionView.visibility = View.GONE
+                        termView.visibility = View.VISIBLE
+                        flashcard.rotationX = 90f // Set the rotation to the front
+                        flashcard.animate()
+                            .rotationX(0f)
+                            .setDuration(flipDuration / 2)
+                            .setInterpolator(AccelerateDecelerateInterpolator())
+                            .withEndAction {
+                                isAnimating = false
+                            }
+                            .start()
+                    }
+                    .start()
             }
+
+            isFrontVisible = !isFrontVisible
         }
     }
 }

@@ -48,12 +48,12 @@ class SignInActivity : AppCompatActivity() {
     }
 
     //If user is already sign in, then it wont take them to the sign up page
-    /*override fun onStart() {
+    override fun onStart() {
         super.onStart()
 
         if(firebaseAuth.currentUser != null){
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-    }*/
+    }
 }
